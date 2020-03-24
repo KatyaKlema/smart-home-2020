@@ -1,22 +1,18 @@
 package ru.sbt.mipt.oop;
 
+import java.util.ArrayList;
+
 public class SensorEvent {
-    private final SensorEventTypeDoor typeDoor;
-    private final SensorEventTypeLight typeLight;
+    private SensorEventType sensorEventType;
     private final String objectId;
 
-    public SensorEvent(SensorEventTypeDoor _typeDoor, SensorEventTypeLight _typeLight, String objectId) {
-        this.typeDoor = _typeDoor;
-        this.typeLight = _typeLight;
+    public SensorEvent(SensorEventType sensorEventType, String objectId) {
+        this.sensorEventType = sensorEventType;
         this.objectId = objectId;
     }
 
-    public SensorEventTypeLight getTypeLight() {
-        return typeLight;
-    }
-
-    public SensorEventTypeDoor getTypeDoor(){
-        return typeDoor;
+    public SensorEventType getType(){
+        return this.sensorEventType;
     }
 
     public String getObjectId() {
@@ -27,7 +23,7 @@ public class SensorEvent {
     public String toString() {
 
         return "SensorEvent{" +
-                "type=" + (typeDoor == null ? typeLight : typeDoor) +
+                "type=" + sensorEventType +
                 ", objectId='" + objectId + '\'' +
                 '}';
     }
