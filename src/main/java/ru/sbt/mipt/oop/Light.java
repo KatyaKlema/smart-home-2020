@@ -1,6 +1,6 @@
 package ru.sbt.mipt.oop;
 
-import static ru.sbt.mipt.oop.SensorEventTypeLight.LIGHT_ON;
+import static ru.sbt.mipt.oop.SensorEventType.LIGHT_ON;
 
 public class Light {
     private boolean isOn;

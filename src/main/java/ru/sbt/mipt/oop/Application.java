@@ -8,11 +8,10 @@ import java.util.List;
 public class Application {
     public static void main(String... args) throws IOException {
         // считываем состояние дома из файла
-        JSON tempJSON = new JSON("smart-home-1.js");
+        JSONData tempJSON = new JSONData("smart-home-1.js");
         Gson gson = new Gson();
         SmartHome smartHome = gson.fromJson(tempJSON.getData(), SmartHome.class);
         smartHome.setAlarm(new Alarm(2));
-
 
         //Homework 3
         TriggerAlarmEventProcessor triggerAlarmEventProcessorLight = new TriggerAlarmEventProcessor(smartHome, new LightEventProcessor(smartHome));
@@ -20,16 +19,9 @@ public class Application {
 
 
         // начинаем цикл обработки событий
-        Event eventTemp = new Event();
+        Event event = new Event();
         List<Processor> processors = Arrays.asList(new LightEventProcessor(smartHome), new DoorEventProcessor(smartHome));
-
-        while (eventTemp.getEvent() != null) {
-            System.out.println("Got event: " + eventTemp.getEvent());
-            for(Processor processor : processors){
-                processor.processing(eventTemp);
-            }
-            EventProcessing nextEvent = new EventProcessing();
-            eventTemp.setEvent(nextEvent.next(eventTemp.getEvent()));
-        }
+        SmartHomeHandler smartHomeHandler = new SmartHomeHandler(smartHome, event, processors);
+        smartHomeHandler.runCycleForEvent();
     }
 }

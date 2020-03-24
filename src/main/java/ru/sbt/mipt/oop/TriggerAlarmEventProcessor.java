@@ -1,29 +1,30 @@
 package ru.sbt.mipt.oop;
 
-public class TriggerAlarmEventProcessor implements Processor<Event> {
-    SmartHome smartHome;
-    private Processor<Event> wrapperProcessor;
-    public TriggerAlarmEventProcessor(SmartHome smartHome, Processor<Event> wrapperProcessor){
+public class TriggerAlarmEventProcessor implements Processor{
+    private SmartHome smartHome;
+    private boolean isSended;
+    private Processor wrapperProcessor;
+    public TriggerAlarmEventProcessor(SmartHome smartHome, Processor wrapperProcessor){
         this.smartHome = smartHome;
         this.wrapperProcessor = wrapperProcessor;
+        isSended = false;
     }
-    private boolean isDoor(Event event){
-        return event.getEvent().getTypeDoor() == SensorEventTypeDoor.DOOR_OPEN || event.getEvent().getTypeDoor() == SensorEventTypeDoor.DOOR_CLOSED;
+    private boolean isCorrect(Event event){
+        return event.getSensorEvent().getType() == SensorEventType.DOOR_OPEN || event.getSensorEvent().getType() == SensorEventType.DOOR_CLOSED
+                || event.getSensorEvent().getType() == SensorEventType.LIGHT_ON || event.getSensorEvent().getType() == SensorEventType.LIGHT_OFF;
     }
-
-    private boolean isLight(Event event){
-        return event.getEvent().getTypeLight() == SensorEventTypeLight.LIGHT_ON || event.getEvent().getTypeLight() == SensorEventTypeLight.LIGHT_OFF;
-    }
-    @Override
+    
     public void processing(Event event){
-        if(isLight(event) || isDoor(event)){
+        if(isCorrect(event)){
             if(smartHome.getAlarm().isActivatedAlarm()){
                 smartHome.getAlarm().getAlarmState().ALARM_TRIGGER();
                 System.out.println("Sending sms");
             }
             else if(smartHome.getAlarm().isTriggered()){
                 smartHome.getAlarm().getAlarmState().ignore();
-                System.out.println("Sending sms");
+                if(!isSended)
+                    System.out.println("Sending sms");
+                isSended = true;
             }
             else{
                 wrapperProcessor.processing(event);

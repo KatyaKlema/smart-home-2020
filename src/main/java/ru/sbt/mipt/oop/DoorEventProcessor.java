@@ -1,23 +1,31 @@
 package ru.sbt.mipt.oop;
 
-import static ru.sbt.mipt.oop.SensorEventTypeDoor.DOOR_CLOSED;
-import static ru.sbt.mipt.oop.SensorEventTypeDoor.DOOR_OPEN;
+import static ru.sbt.mipt.oop.SensorEventType.DOOR_CLOSED;
+import static ru.sbt.mipt.oop.SensorEventType.DOOR_OPEN;
 
-public class DoorEventProcessor implements Processor<Event>{
+public class DoorEventProcessor implements Processor{
     private SmartHome smartHome;
-    private DoorIterator doorIterator;
     public DoorEventProcessor(SmartHome smartHome){
         this.smartHome = smartHome;
-        this.doorIterator = new DoorIterator(smartHome);;
     }
     private boolean isDoor(Event event){
-        return event.getEvent().getTypeDoor() == DOOR_OPEN || event.getEvent().getTypeDoor() == DOOR_CLOSED;
+        return event.getSensorEvent().getType() == DOOR_OPEN || event.getSensorEvent().getType() == DOOR_CLOSED;
     }
-    @Override
     public void processing(Event event) {
         if(isDoor(event)){
             // событие от двери
-            doorIterator.iterate(event);
+            smartHome.execute(object -> {
+                if (object instanceof Door) {
+                    Door door = (Door) object;
+                    if (event.getSensorEvent().getObjectId().equals(door.getId())) {
+                        if (event.getSensorEvent().getType() == DOOR_OPEN) {
+                            door.setOpen(true);
+                        } else {
+                            door.setOpen(false);
+                        }
+                    }
+                }
+            });
         }
     }
 }

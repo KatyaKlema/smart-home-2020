@@ -1,7 +1,7 @@
 package ru.sbt.mipt.oop;
 
 public class Alarm {
-    private final Integer code;
+    private final int code;
     private AlarmState alarmState;
 
 
@@ -15,9 +15,10 @@ public class Alarm {
         this.alarmState = new DeactiveState(this);
     }
 
-    public Integer getCode(){
-        return this.code;
+    public boolean isEqual(int code){
+        return this.code == code;
     }
+
     public AlarmState getAlarmState(){
         return this.alarmState;
     }
@@ -28,8 +29,8 @@ public class Alarm {
     public boolean isTriggered(){
         return this.alarmState instanceof TriggerState;
     }
-    public void setAlarmState(Integer code, AlarmState alarmState){
-        if(code != this.code){
+    public void setAlarmState(Alarm alarm, AlarmState alarmState){
+        if(!alarm.isEqual(this.code)){
             this.alarmState = new TriggerState(this);
         }
         else {

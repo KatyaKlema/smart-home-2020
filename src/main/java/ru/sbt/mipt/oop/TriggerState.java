@@ -10,7 +10,8 @@ public class TriggerState extends AlarmState {
     public void ALARM_ACTIVATE(Integer code) {
         if(!isIgnore) {
             if (isAlarm()) {
-                alarm.setAlarmState(code, new ActiveState(alarm));
+                Alarm tempAlarm = new Alarm(code);
+                alarm.setAlarmState(tempAlarm, new ActiveState(alarm));
             }
         }
     }
