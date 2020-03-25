@@ -39,6 +39,6 @@ public class SmartHome implements Actionable{
 
     @Override
     public void execute(Action action) {
-        action.init(this);
+        action.execute(this);
     }
 }

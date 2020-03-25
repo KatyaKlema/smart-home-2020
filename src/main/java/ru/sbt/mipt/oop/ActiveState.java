@@ -18,10 +18,10 @@ public class ActiveState extends AlarmState {
     @Override
     public void ALARM_DEACTIVATE(Integer code) {
         if(!isIgnore) {
-            if (code.equals(this.alarm.getCode())) {
-                alarm.setAlarmState(code, new DeactiveState(alarm));
+            if (alarm.isEqual(code)) {
+                alarm.setAlarmState(alarm, new DeactiveState(alarm));
             } else {
-                alarm.setAlarmState(code, new TriggerState(alarm));
+                alarm.setAlarmState(alarm, new TriggerState(alarm));
                 System.out.print("TRIGGER !");
             }
         }
@@ -31,7 +31,7 @@ public class ActiveState extends AlarmState {
     public void ALARM_TRIGGER() {
         if(!isIgnore) {
             if (isAlarm()) {
-                alarm.setAlarmState(alarm.getCode(), new TriggerState(alarm));
+                alarm.setAlarmState(alarm, new TriggerState(alarm));
                 System.out.println("TRIGGER !");
             }
         }

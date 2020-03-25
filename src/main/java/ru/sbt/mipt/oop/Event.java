@@ -7,7 +7,7 @@ public class Event {
     private static SensorEvent event;
 
     public Event (){
-        RandomEvent tempEvent = new RandomEvent();
+        RandomEventGenerate tempEvent = new RandomEventGenerate();
         this.event = tempEvent.randomizeData();
     }
     public Event(SensorEvent _event){
@@ -15,13 +15,14 @@ public class Event {
     }
 
     public SensorEvent getNextSensorEvent(){
-        RandomEvent tempEvent = new RandomEvent();
+        RandomEventGenerate tempEvent = new RandomEventGenerate();
         event = tempEvent.randomizeData();
         return event;
     }
     public SensorEvent getSensorEvent(){
         return this.event;
     }
+
     public void setSensorEvent(SensorEvent newEvent){
         this.event = newEvent;
     }
