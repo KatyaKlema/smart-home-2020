@@ -11,6 +11,9 @@ public class DeactiveState extends AlarmState {
         this.alarmStateType = AlarmStateType.INACTIVE;
         this.alarm = alarm;
     }
+    public DeactiveState(){
+        this.alarmStateType = AlarmStateType.INACTIVE;
+    }
     @Override
     public void alarmActivate(Integer code) {
         if(!isIgnore) {

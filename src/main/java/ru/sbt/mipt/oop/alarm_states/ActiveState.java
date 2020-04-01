@@ -10,6 +10,10 @@ public class ActiveState extends AlarmState {
         this.alarm = alarm;
     }
 
+    public ActiveState(){
+        this.alarmStateType = AlarmStateType.ACTIVE;
+    }
+
     @Override
     public void alarmActivate(Integer code) {
         if(!isIgnore) {
