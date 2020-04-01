@@ -5,20 +5,21 @@ import static ru.sbt.mipt.oop.SensorEventType.DOOR_OPEN;
 
 public class DoorEventProcessor implements Processor{
     private SmartHome smartHome;
+    public DoorEventProcessor(){ this.smartHome = new SmartHome(); }
     public DoorEventProcessor(SmartHome smartHome){
         this.smartHome = smartHome;
     }
-    private boolean isDoor(Event event){
-        return event.getSensorEvent().getType() == DOOR_OPEN || event.getSensorEvent().getType() == DOOR_CLOSED;
+    private boolean isDoor(SensorEvent event){
+        return event.getType() == DOOR_OPEN || event.getType() == DOOR_CLOSED;
     }
-    public void processing(Event event) {
+    public void processing(SensorEvent event) {
         if(isDoor(event)){
             // событие от двери
             smartHome.execute(object -> {
                 if (object instanceof Door) {
                     Door door = (Door) object;
-                    if (event.getSensorEvent().getObjectId().equals(door.getId())) {
-                        if (event.getSensorEvent().getType() == DOOR_OPEN) {
+                    if (event.getObjectId().equals(door.getId())) {
+                        if (event.getType() == DOOR_OPEN) {
                             door.setOpen(true);
                         } else {
                             door.setOpen(false);

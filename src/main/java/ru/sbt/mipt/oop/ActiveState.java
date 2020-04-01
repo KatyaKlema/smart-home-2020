@@ -7,7 +7,7 @@ public class ActiveState extends AlarmState {
     }
 
     @Override
-    public void ALARM_ACTIVATE(Integer code) {
+    public void alarmActivate(Integer code) {
         if(!isIgnore) {
             if (isAlarm()) {
                 System.out.println("Already the Alarm has been activated");
@@ -16,7 +16,7 @@ public class ActiveState extends AlarmState {
     }
 
     @Override
-    public void ALARM_DEACTIVATE(Integer code) {
+    public void alarmDeactivate(Integer code) {
         if(!isIgnore) {
             if (alarm.isEqual(code)) {
                 alarm.setAlarmState(alarm, new DeactiveState(alarm));
@@ -28,7 +28,7 @@ public class ActiveState extends AlarmState {
     }
 
     @Override
-    public void ALARM_TRIGGER() {
+    public void alarmTrigger() {
         if(!isIgnore) {
             if (isAlarm()) {
                 alarm.setAlarmState(alarm, new TriggerState(alarm));

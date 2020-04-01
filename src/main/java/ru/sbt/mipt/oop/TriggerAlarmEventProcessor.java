@@ -9,15 +9,19 @@ public class TriggerAlarmEventProcessor implements Processor{
         this.wrapperProcessor = wrapperProcessor;
         isSended = false;
     }
-    private boolean isCorrect(Event event){
-        return event.getSensorEvent().getType() == SensorEventType.DOOR_OPEN || event.getSensorEvent().getType() == SensorEventType.DOOR_CLOSED
-                || event.getSensorEvent().getType() == SensorEventType.LIGHT_ON || event.getSensorEvent().getType() == SensorEventType.LIGHT_OFF;
+    private boolean isCorrectType(SensorEvent event){
+        boolean ret = false;
+        SensorEventType fixedType = event.getType();
+        for(SensorEventType sensorEventType : SensorEventType.values()){
+            ret = ret || (fixedType == sensorEventType);
+        }
+        return ret;
     }
 
-    public void processing(Event event){
-        if(isCorrect(event)){
+    public void processing(SensorEvent event){
+        if(isCorrectType(event)){
             if(smartHome.getAlarm().isActivatedAlarm()){
-                smartHome.getAlarm().getAlarmState().ALARM_TRIGGER();
+                smartHome.getAlarm().getAlarmState().alarmTrigger();
                 System.out.println("Sending sms");
             }
             else if(smartHome.getAlarm().isTriggered()){

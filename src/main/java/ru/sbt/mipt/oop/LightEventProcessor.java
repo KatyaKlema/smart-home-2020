@@ -6,21 +6,23 @@ import static ru.sbt.mipt.oop.SensorEventType.LIGHT_ON;
 public class LightEventProcessor implements Processor {
     SmartHome smartHome;
 
+    public LightEventProcessor(){ this.smartHome = new SmartHome(); }
+
     public LightEventProcessor(SmartHome smartHome){
         this.smartHome = smartHome;
     }
-    private boolean isLight(Event event){
-        return event.getSensorEvent().getType() == LIGHT_ON || event.getSensorEvent().getType() == LIGHT_OFF;
+    private boolean isLight(SensorEvent event){
+        return event.getType() == LIGHT_ON || event.getType() == LIGHT_OFF;
     }
     @Override
-    public void processing(Event event) {
+    public void processing(SensorEvent event) {
         if(isLight(event)) {
             // событие от источника света
             smartHome.execute( object -> {
                 if ( object instanceof Light) {
                     Light light = (Light) object;
-                    if (event.getSensorEvent().getObjectId().equals(light.getId())) {
-                        if ( event.getSensorEvent().getType() == LIGHT_OFF) {
+                    if (event.getObjectId().equals(light.getId())) {
+                        if ( event.getType() == LIGHT_OFF) {
                             light.setOn(false);
                         }
                         else {

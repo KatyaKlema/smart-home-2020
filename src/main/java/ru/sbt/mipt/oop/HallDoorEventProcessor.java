@@ -5,30 +5,39 @@ import static ru.sbt.mipt.oop.SensorEventType.DOOR_OPEN;
 
 public class HallDoorEventProcessor implements Processor{
     SmartHome smartHome;
+
+    public HallDoorEventProcessor(){ this.smartHome = new SmartHome(); }
     public HallDoorEventProcessor(SmartHome smartHome){
         this.smartHome = smartHome;
     }
 
     @Override
-    public void processing(Event event) {
-        if ( event.getSensorEvent().getType() == DOOR_CLOSED) {
-            for ( Room room : smartHome.getRooms() ) {
-                for ( Door door : room.getDoors() ) {
-                    if (door.getId().equals(event.getSensorEvent().getObjectId()) && room.getName().equals("hall")) {
-                        iterate(smartHome);
-                        door.setOpen(false);
-                    }
+    public void processing(SensorEvent event) {
+        if ( event.getType() == DOOR_CLOSED) {
+            smartHome.execute(object -> {
+                if (!(event.getType() == DOOR_CLOSED && object instanceof Room)) {
+                    return;
                 }
-            }
-        }
-    }
 
-    private void iterate(SmartHome smartHome) {
-        smartHome.execute(object -> {
-            if (object instanceof Light) {
-                Light light = (Light) object;
-                light.setOn(false);
-            }
-        });
+                Room room = (Room) object;
+                if (room.getName().equals("hall")) {
+                    room.execute(hallInstance -> {
+                        if (hallInstance instanceof Door) {
+                            Door door = (Door) hallInstance;
+                            if (door.getId().equals((event.getObjectId()))) {
+                                smartHome.execute(homeInstance -> {
+                                    if (homeInstance instanceof Light) {
+                                        Light light = (Light) homeInstance;
+                                        light.setOn(false);
+                                        System.out.println("Light " + light.getId() + " was turned off.");
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+
+            });
+        }
     }
 }

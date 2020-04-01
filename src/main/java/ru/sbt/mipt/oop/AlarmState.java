@@ -5,9 +5,9 @@ public abstract class AlarmState {
     protected AlarmStateType alarmStateType;
     public boolean isIgnore = false;
 
-    public abstract void ALARM_ACTIVATE(Integer instruction);
-    public abstract void ALARM_DEACTIVATE(Integer instruction);
-    public abstract void ALARM_TRIGGER();
+    public abstract void alarmActivate(Integer instruction);
+    public abstract void alarmDeactivate(Integer instruction);
+    public abstract void alarmTrigger();
     public void ignore(){
         this.isIgnore = true;
     }

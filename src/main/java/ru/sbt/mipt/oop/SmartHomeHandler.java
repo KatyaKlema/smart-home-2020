@@ -5,22 +5,23 @@ import java.util.List;
 public class SmartHomeHandler implements Handler {
     private SmartHome smartHome;
     private List<Processor> processors;
-    private Event event;
+    private SensorEvent event;
 
-    public SmartHomeHandler(SmartHome smartHome, Event event, List<Processor> processors){
+    public SmartHomeHandler(SmartHome smartHome, SensorEvent event, List<Processor> processors){
         this.smartHome = smartHome;
         this.event = event;
         this.processors = processors;
     }
 
     public void runCycleForEvent(){
-        Event tempEvent = this.event;
-        while (tempEvent.getSensorEvent() != null) {
-            System.out.println("Got event: " + tempEvent.getSensorEvent());
+        SensorEvent tempEvent = this.event;
+        while (tempEvent != null) {
+            System.out.println("Got event: " + tempEvent);
             for(Processor processor : processors){
                 processor.processing(tempEvent);
             }
-            tempEvent.setSensorEvent(event.getNextSensorEvent());
+            Iterate next = new Iterate();
+            tempEvent.setSensorEvent(next.getNextSensorEvent(event));
         }
     }
 }
