@@ -1,3 +1,35 @@
+# Задание
+Прочитать про шаблоны
+- Адаптер
+https://refactoring.guru/ru/design-patterns/adapter
+- Singleton
+https://refactoring.guru/ru/design-patterns/singleton
+
+- Пришло оборудование для умного дома и к нему шла библиотека, которая предоставляет API для работы с сенсорами. Это API можно взять в проекте smart-home-2019, в ветке library:
+https://github.com/sbt-agoshkov/smart-home-2020/tree/library
+(в репозитории API лежит в виде исходного кода, на самом деле нужно представить, что исходного кода нет, есть готовый jar файл с API, изменять который мы естественно не можем и не должны).
+Единственный исходный код, который был вместе с API - это пример использования (класс ```Sample```).
+- Вам необходимо подключить это API к нашему проекту умного дома, при этом хотелось бы переписать минимальное количество кода.
+Для подключения библиотеки необходимо использовать шаблон адаптер.
+- Также необходимо перевести проект на spring IoC: 
+http://spring-projects.ru/guides/lessons/lesson-1/
+http://spring-projects.ru/guides/lessons/lesson-2
+После подключения Spring ваш “главный класс” должен стать примерно таким:
+
+```java
+public class Application {
+
+   public static void main(String[] args) {
+       AbstractApplicationContext context = new AnnotationConfigApplicationContext(MyConfiguration.class);
+       SensorEventsManager sensorEventsManager = context.getBean(SensorEventsManager.class);
+       sensorEventsManager.start();
+   }
+  
+}
+```
+
+
+
 # Smart Home
 
 The project implements a "smart home". The house has sensors which are connected to the central server. Sensors send 
