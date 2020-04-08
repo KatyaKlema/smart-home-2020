@@ -1,3 +1,6 @@
+# Задание 
+Отрефакторить код в ветке соответствии с принципами SOLID
+
 # Smart Home
 
 The project implements a "smart home". The house has sensors which are connected to the central server. Sensors send 
