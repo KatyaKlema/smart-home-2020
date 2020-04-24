@@ -48,9 +48,9 @@ public class Application {
         controlService.registerAdaptController(remoteController1, new Integer(remoteController1.getId()).toString());
         controlService.registerAdaptController(remoteController2, new Integer(remoteController2.getId()).toString());
 
-//        AbstractApplicationContext context = new AnnotationConfigApplicationContext(SmartHomeConfig.class);
-//        SensorEventsManager sensorEventsManager = context.getBean(SensorEventsManager.class);
-//        sensorEventsManager.start();
+       AbstractApplicationContext context = new AnnotationConfigApplicationContext(SmartHomeConfig.class);
+       SensorEventsManager sensorEventsManager = context.getBean(SensorEventsManager.class);
+       sensorEventsManager.start();
 
     }
 }
