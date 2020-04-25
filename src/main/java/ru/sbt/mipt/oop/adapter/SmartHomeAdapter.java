@@ -9,20 +9,21 @@ import ru.sbt.mipt.oop.processors.DoorEventProcessor;
 import ru.sbt.mipt.oop.processors.Processor;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SmartHomeAdapter implements EventHandler {
-    private Processor processor;
+    private List<Processor> processors;
     private SmartHome smartHome;
     private Map<String, SensorEventType> name2Type;
 
-    public SmartHomeAdapter(){
-        this.processor = new DoorEventProcessor();
+    public SmartHomeAdapter(List<Processor> processors){
+        this.processors = processors;
         this.smartHome = new SmartHome();
         this.name2Type = new HashMap<String, SensorEventType>();
     }
-    public SmartHomeAdapter(Processor processor, SmartHome smartHome, Map<String, SensorEventType> name2Type){
-        this.processor = processor;
+    public SmartHomeAdapter(List<Processor> processors, SmartHome smartHome, Map<String, SensorEventType> name2Type){
+        this.processors = processors;
         this.smartHome = smartHome;
         this.name2Type = name2Type;
     }
@@ -32,6 +33,8 @@ public class SmartHomeAdapter implements EventHandler {
     }
     @Override
     public void handleEvent(CCSensorEvent event) {
-        processor.processing(adapterConvert(event));
+        for(Processor processor : processors){
+            processor.processing(adapterConvert(event));
+        }
     }
 }
