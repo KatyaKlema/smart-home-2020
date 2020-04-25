@@ -27,7 +27,7 @@ public class SmartHomeAdapter implements EventHandler {
         this.name2Type = name2Type;
     }
 
-    public SensorEvent adapterConvert(CCSensorEvent event){
+    private SensorEvent adapterConvert(CCSensorEvent event){
         return new SensorEvent(name2Type.get(event.getEventType()), event.getEventType());
     }
     @Override
