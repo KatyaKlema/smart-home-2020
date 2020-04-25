@@ -7,7 +7,7 @@ import ru.sbt.mipt.oop.processors.Processor;
 
 import java.util.List;
 
-public class SmartHomeHandler implements Handler {
+public class SmartHomeHandler {
     private SmartHome smartHome;
     private List<Processor> processors;
     private SensorEvent event;
