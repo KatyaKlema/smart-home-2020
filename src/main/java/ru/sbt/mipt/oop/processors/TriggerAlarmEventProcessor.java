@@ -4,13 +4,15 @@ import ru.sbt.mipt.oop.events.SensorEvent;
 import ru.sbt.mipt.oop.events.SensorEventType;
 import ru.sbt.mipt.oop.home_components.SmartHome;
 
+import java.util.List;
+
 public class TriggerAlarmEventProcessor implements Processor{
     private SmartHome smartHome;
     private boolean isSended;
-    private Processor wrapperProcessor;
-    public TriggerAlarmEventProcessor(SmartHome smartHome, Processor wrapperProcessor){
+    private List<Processor>processors;
+    public TriggerAlarmEventProcessor(SmartHome smartHome, List<Processor>processors){
         this.smartHome = smartHome;
-        this.wrapperProcessor = wrapperProcessor;
+        this.processors = processors;
         isSended = false;
     }
     private boolean isCorrectType(SensorEvent event){
@@ -29,13 +31,14 @@ public class TriggerAlarmEventProcessor implements Processor{
                 System.out.println("Sending sms");
             }
             else if(smartHome.getAlarm().isTriggered()){
-                smartHome.getAlarm().getAlarmState().ignore();
                 if(!isSended)
                     System.out.println("Sending sms");
                 isSended = true;
             }
             else{
-                wrapperProcessor.processing(event);
+                for(Processor processor : processors){
+                    processor.processing(event);
+                }
             }
         }
     }
