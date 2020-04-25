@@ -3,14 +3,11 @@ package ru.sbt.mipt.oop.alarm;
 public abstract class AlarmState {
     protected Alarm alarm;
     protected AlarmStateType alarmStateType;
-    public boolean isIgnore = false;
 
     public abstract void alarmActivate(Integer instruction);
     public abstract void alarmDeactivate(Integer instruction);
     public abstract void alarmTrigger();
-    public void ignore(){
-        this.isIgnore = true;
-    }
+
 
     public AlarmStateType getAlarmStateType(){
         return this.alarmStateType;
