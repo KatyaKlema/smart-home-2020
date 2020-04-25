@@ -7,6 +7,7 @@ import ru.sbt.mipt.oop.adapter.SmartHomeAdapter;
 import ru.sbt.mipt.oop.data_reader.JSONData;
 import ru.sbt.mipt.oop.events.SensorEvent;
 import ru.sbt.mipt.oop.home_components.SmartHome;
+import ru.sbt.mipt.oop.home_readers.HomeReader;
 import ru.sbt.mipt.oop.processors.*;
 import ru.sbt.mipt.oop.smart_home.SmartHomeHandler;
 
@@ -17,21 +18,8 @@ import java.util.Map;
 
 public class SmartHomeConfig {
     @Bean
-    public SmartHome smartHome() throws IOException{
-        JSONData tempJSON = new JSONData("smart-home-1.js");
-        Gson gson = new Gson();
-        SmartHome smartHome = gson.fromJson(tempJSON.getData(), SmartHome.class);
-        return smartHome;
-    }
-
-    @Bean
-    TriggerAlarmEventProcessor triggerAlarmEventProcessorLight(SmartHome smartHome){
-        return new TriggerAlarmEventProcessor(smartHome, new LightEventProcessor(smartHome));
-    }
-
-    @Bean
-    TriggerAlarmEventProcessor triggerAlarmEventProcessorDoor(SmartHome smartHome){
-        return new TriggerAlarmEventProcessor(smartHome, new DoorEventProcessor(smartHome));
+    public SmartHome smartHome(HomeReader homeReader) throws IOException{
+        return homeReader.read("smart-home-1.js");
     }
 
     @Bean
@@ -52,11 +40,6 @@ public class SmartHomeConfig {
     @Bean
     public Processor hallDoorEventProcessor(){
         return new HallDoorEventProcessor();
-    }
-
-    @Bean
-    public SmartHomeHandler smartHomeHandler(SmartHome smartHome, SensorEvent event, List<Processor> processors){
-        return new SmartHomeHandler(smartHome, event, processors);
     }
 
     @Bean
