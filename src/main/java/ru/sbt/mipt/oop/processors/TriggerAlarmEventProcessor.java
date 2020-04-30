@@ -23,7 +23,8 @@ public class TriggerAlarmEventProcessor implements Processor{
         }
         return ret;
     }
-
+    
+    @Override
     public void processing(SensorEvent event){
         if(isCorrectType(event)){
             if(smartHome.getAlarm().isActivatedAlarm()){
