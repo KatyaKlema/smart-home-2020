@@ -1,50 +1,122 @@
 package ru.sbt.mipt.oop.configurations;
 
-import com.coolcompany.smarthome.ControlService;
+import com.coolcompany.smarthome.events.SensorEventsManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import rc.RemoteControl;
-import ru.sbt.mipt.oop.actions.Action;
-import ru.sbt.mipt.oop.actions.DoorClose;
-import ru.sbt.mipt.oop.alarm.Alarm;
-import ru.sbt.mipt.oop.alarm.AlarmState;
-import ru.sbt.mipt.oop.alarm_states.ActiveState;
-import ru.sbt.mipt.oop.button.Button;
-import ru.sbt.mipt.oop.events.SensorEvent;
+import rc.RemoteControlRegistry;
+import ru.sbt.mipt.oop.adapter.SmartHomeAdapter;
+import ru.sbt.mipt.oop.events.SensorEventType;
 import ru.sbt.mipt.oop.home_components.SmartHome;
 import ru.sbt.mipt.oop.home_readers.HomeReader;
+import ru.sbt.mipt.oop.processors.DoorEventProcessor;
+import ru.sbt.mipt.oop.processors.HallDoorEventProcessor;
+import ru.sbt.mipt.oop.processors.LightEventProcessor;
+import ru.sbt.mipt.oop.processors.Processor;
 import ru.sbt.mipt.oop.remote.RemoteController;
-import ru.sbt.mipt.oop.remote_instructions.Instruction;
-import ru.sbt.mipt.oop.remote_instructions.Nothing;
+import ru.sbt.mipt.oop.remote_instructions.*;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 @Configuration
 public class RemoteControlConfig {
     @Bean
-    RemoteController remoteControl1(List<Instruction> instructions, Map<String, Instruction> instructionMap) {
-        RemoteController remoteController1 = new RemoteController("1");
-        return remoteController1;
+    public SmartHome smartHome(HomeReader homeReader) throws IOException{
+        return homeReader.read("smart-home-1.js");
+    }
+    @Bean
+    public Instruction turnOffAllLightInstruction(SmartHome smartHome) {
+        return new AllLightOffInstruction(smartHome);
     }
 
     @Bean
-    RemoteController remoteControl2(List<Instruction> instructions, Map<String, Instruction> instructionMap) {
-        RemoteController remoteController2 = new RemoteController("1");
-        return remoteController2;
+    public Instruction closeHallDoorInstruction(SmartHome smartHome) {
+        return new HallDoorCloseInstruction(smartHome);
+    }
+
+    @Bean
+    public Instruction turnOnHallLightInstruction(SmartHome smartHome) {
+        return new HallLightOnInstruction(smartHome);
+    }
+
+    @Bean
+    public Instruction activateAlarmDeviceInstruction(SmartHome smartHome, int code) {
+        return new AlarmActivateInstruction(smartHome,code);
+    }
+
+    @Bean
+    public int code() {
+        return 123;
     }
 
 
     @Bean
-    void registerAdaptController1(RemoteController remoteController1, ControlService controlService) {
-        controlService.registerAdaptController(remoteController1, new Integer(remoteController1.getId()).toString());
+    public Instruction activateAlarmModeInstruction(SmartHome smartHome) {
+        return new TriggerAlarmInstruction(smartHome);
     }
 
     @Bean
-    void registerAdaptController2(RemoteController remoteController2, ControlService controlService) {
-        controlService.registerAdaptController(remoteController2, new Integer(remoteController2.getId()).toString());
+    public Instruction turnOnAllLightInstruction(SmartHome smartHome) {
+        return new AllLightOnInstruction(smartHome);
     }
-    
+
+    @Bean
+    public RemoteControl remoteController(String rcId) {
+        return new RemoteController(rcId);
+    }
+
+    @Bean
+    public String rcId() {
+        return "1";
+    }
+
+    @Bean
+    public RemoteControlRegistry remoteControlRegistry(RemoteController remoteControl, String rcId) {
+        RemoteControlRegistry remoteControlRegistry = new RemoteControlRegistry();
+        remoteControlRegistry.registerRemoteControl(remoteControl, rcId);
+        return remoteControlRegistry;
+    }
+
+    @Bean
+    public Processor doorEventProcessor(SmartHome smartHome) {
+        return new DoorEventProcessor(smartHome);
+    }
+
+    @Bean
+    public Processor lightEventProcessor(SmartHome smartHome) {
+        return new LightEventProcessor(smartHome);
+    }
+
+    @Bean
+    public Processor hallDoorEventProcessor(SmartHome smartHome) {
+        return new HallDoorEventProcessor(smartHome);
+    }
+
+    @Bean
+    public List<Processor> handlers(Processor hallDoorEventProcessor, Processor lightEventProcessor,
+                                       Processor doorEventProcessor) {
+        return Arrays.asList(hallDoorEventProcessor, lightEventProcessor, doorEventProcessor);
+    }
+
+    @Bean
+    public Map<String, SensorEventType> typeMap () {
+        return Map.of(
+                "LightIsOn", SensorEventType.LIGHT_ON,
+                "LightIsOff", SensorEventType.LIGHT_OFF,
+                "DoorIsOpen", SensorEventType.DOOR_OPEN,
+                "DoorIsClosed", SensorEventType.DOOR_CLOSED
+        );
+    }
+
+    @Bean
+    public SensorEventsManager sensorEventsManager(List<Processor> processors, SmartHome smartHome,
+                                                   Map<String, SensorEventType> typeMap) {
+        SensorEventsManager sensorEventsManager = new SensorEventsManager();
+        sensorEventsManager.registerEventHandler(new SmartHomeAdapter(processors));
+        return sensorEventsManager;
+    }
 
 }
