@@ -28,9 +28,10 @@ public class Application {
 
         // начинаем цикл обработки событий
         SensorEvent event = new SensorEvent();
-        List<Processor> processors = Arrays.asList(new LightEventProcessor(smartHome), new DoorEventProcessor(smartHome),
-                                    new HallDoorEventProcessor(smartHome), new TriggerAlarmEventProcessor(smartHome,
-                                    Arrays.asList(new LightEventProcessor(smartHome), new DoorEventProcessor(smartHome))));
+        List<Processor> processors = Arrays.asList(new TriggerAlarmEventProcessor(smartHome,
+                                    Arrays.asList(new LightEventProcessor(smartHome), 
+                                                  new DoorEventProcessor(smartHome),
+                                                  new HallDoorEventProcessor(smartHome))));
 
         SmartHomeHandler smartHomeHandler = new SmartHomeHandler(smartHome, event, processors);
         smartHomeHandler.runCycleForEvent();
