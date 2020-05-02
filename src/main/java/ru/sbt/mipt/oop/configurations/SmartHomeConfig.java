@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-
+@Configuration
 public class SmartHomeConfig {
     @Bean
     public SmartHome smartHome(HomeReader homeReader) throws IOException{
