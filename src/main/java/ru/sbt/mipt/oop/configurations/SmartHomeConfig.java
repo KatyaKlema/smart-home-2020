@@ -43,7 +43,7 @@ public class SmartHomeConfig {
     }
 
     @Bean
-    public SensorEventsManager smartHomeAdapter(SmartHomeAdapter smartHomeAdapter){
+    public SensorEventsManager sensorEventManager(SmartHomeAdapter smartHomeAdapter){
         SensorEventsManager sensorEventsManager = new SensorEventsManager();
         sensorEventsManager.registerEventHandler(smartHomeAdapter);
         return sensorEventsManager;
