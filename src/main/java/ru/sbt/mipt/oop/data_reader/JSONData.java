@@ -26,7 +26,7 @@ public class JSONData implements SmartHomeData<String> {
     }
 
     //setJSON
-    public void writeData(String addr) throws IOException {
+    public void writeData(String addr) {
         jsonStr = new String(Files.readAllBytes(Paths.get(addr)));
     }
 
