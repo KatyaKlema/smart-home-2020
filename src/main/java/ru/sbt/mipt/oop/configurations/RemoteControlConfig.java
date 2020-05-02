@@ -28,23 +28,23 @@ public class RemoteControlConfig {
         return homeReader.read("smart-home-1.js");
     }
     @Bean
-    public Instruction turnOffAllLightInstruction(SmartHome smartHome) {
-        return new AllLightOffInstruction(smartHome);
-    }
-
-    @Bean
-    public Instruction closeHallDoorInstruction(SmartHome smartHome) {
+    public Instruction hallDoorCloseInstruction(SmartHome smartHome) {
         return new HallDoorCloseInstruction(smartHome);
     }
 
     @Bean
-    public Instruction turnOnHallLightInstruction(SmartHome smartHome) {
+    public Instruction allLightOnInstruction(SmartHome smartHome) {
+        return new AllLightOnInstruction(smartHome);
+    }
+
+    @Bean
+    public Instruction hallLightOnInstruction(SmartHome smartHome) {
         return new HallLightOnInstruction(smartHome);
     }
 
     @Bean
-    public Instruction activateAlarmDeviceInstruction(SmartHome smartHome, int code) {
-        return new AlarmActivateInstruction(smartHome,code);
+    public Instruction allLightOffInstruction(SmartHome smartHome) {
+        return new AllLightOffInstruction(smartHome);
     }
 
     @Bean
@@ -52,15 +52,14 @@ public class RemoteControlConfig {
         return 123;
     }
 
-
     @Bean
-    public Instruction activateAlarmModeInstruction(SmartHome smartHome) {
-        return new TriggerAlarmInstruction(smartHome);
+    public Instruction alarmActivateInstruction(SmartHome smartHome, int codeForActivate) {
+        return new AlarmActivateInstruction(smartHome, codeForActivate);
     }
 
     @Bean
-    public Instruction turnOnAllLightInstruction(SmartHome smartHome) {
-        return new AllLightOnInstruction(smartHome);
+    public Instruction triggerAlarmInstruction(SmartHome smartHome) {
+        return new TriggerAlarmInstruction(smartHome);
     }
 
     @Bean
