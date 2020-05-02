@@ -63,14 +63,15 @@ public class RemoteControlConfig {
     }
 
     @Bean
+    public String rcId() {
+        return "1";
+    }
+    
+    @Bean
     public RemoteControl remoteController(String rcId) {
         return new RemoteController(rcId);
     }
 
-    @Bean
-    public String rcId() {
-        return "1";
-    }
 
     @Bean
     public RemoteControlRegistry remoteControlRegistry(RemoteController remoteControl, String rcId) {
