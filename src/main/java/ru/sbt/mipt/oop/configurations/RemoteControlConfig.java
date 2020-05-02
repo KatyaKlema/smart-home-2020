@@ -24,7 +24,7 @@ import java.util.Map;
 @Configuration
 public class RemoteControlConfig {
     @Bean
-    public SmartHome smartHome(HomeReader homeReader) throws IOException{
+    public SmartHome smartHome(HomeReader homeReader){
         return homeReader.read("smart-home-1.js");
     }
     @Bean
