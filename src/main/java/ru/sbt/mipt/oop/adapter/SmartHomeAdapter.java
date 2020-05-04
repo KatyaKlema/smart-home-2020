@@ -17,11 +17,6 @@ public class SmartHomeAdapter implements EventHandler {
     private SmartHome smartHome;
     private Map<String, SensorEventType> name2Type;
 
-    public SmartHomeAdapter(List<Processor> processors){
-        this.processors = processors;
-        this.smartHome = new SmartHome();
-        this.name2Type = new HashMap<String, SensorEventType>();
-    }
     public SmartHomeAdapter(List<Processor> processors, SmartHome smartHome, Map<String, SensorEventType> name2Type){
         this.processors = processors;
         this.smartHome = smartHome;
