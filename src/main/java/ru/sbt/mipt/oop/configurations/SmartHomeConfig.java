@@ -1,20 +1,15 @@
 package ru.sbt.mipt.oop.configurations;
 
 import com.coolcompany.smarthome.events.SensorEventsManager;
-import com.google.gson.Gson;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ru.sbt.mipt.oop.adapter.SmartHomeAdapter;
-import ru.sbt.mipt.oop.data_reader.JSONData;
-import ru.sbt.mipt.oop.events.SensorEvent;
-import ru.sbt.mipt.oop.home_components.Door;
+import ru.sbt.mipt.oop.events.SensorEventType;
 import ru.sbt.mipt.oop.home_components.SmartHome;
 import ru.sbt.mipt.oop.home_readers.HomeReader;
 import ru.sbt.mipt.oop.processors.*;
-import ru.sbt.mipt.oop.smart_home.SmartHomeHandler;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -46,8 +41,17 @@ public class SmartHomeConfig {
     }
 
     @Bean
-    public SmartHomeAdapter smartHomeAdapter(List<Processor> processors){
-        return new SmartHomeAdapter(processors);
+    public Map<String, SensorEventType> name2Type(){
+        return Map.of(
+                "LightIsOn", SensorEventType.LIGHT_ON,
+                "LightIsOff", SensorEventType.LIGHT_OFF,
+                "DoorIsOpen", SensorEventType.DOOR_OPEN,
+                "DoorIsClosed", SensorEventType.DOOR_CLOSED
+        );
+    }
+    @Bean
+    public SmartHomeAdapter smartHomeAdapter(List<Processor> processors, SmartHome smartHome, Map<String, SensorEventType> name2Type){
+        return new SmartHomeAdapter(processors, smartHome, name2Type);
     }
 
     @Bean
