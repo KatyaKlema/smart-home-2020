@@ -5,10 +5,8 @@ import com.coolcompany.smarthome.events.EventHandler;
 import ru.sbt.mipt.oop.events.SensorEvent;
 import ru.sbt.mipt.oop.events.SensorEventType;
 import ru.sbt.mipt.oop.home_components.SmartHome;
-import ru.sbt.mipt.oop.processors.DoorEventProcessor;
 import ru.sbt.mipt.oop.processors.Processor;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +22,10 @@ public class SmartHomeAdapter implements EventHandler {
     }
 
     private SensorEvent adapterConvert(CCSensorEvent event){
-        return new SensorEvent(name2Type.get(event.getEventType()), event.getEventType());
+        if(name2Type.containsKey(event.getEventType()))
+            return new SensorEvent(name2Type.get(event.getEventType()), event.getEventType());
+        else
+            return null;
     }
     @Override
     public void handleEvent(CCSensorEvent event) {
