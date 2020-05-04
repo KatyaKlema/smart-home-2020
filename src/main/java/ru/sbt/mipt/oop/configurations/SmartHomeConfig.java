@@ -7,6 +7,7 @@ import ru.sbt.mipt.oop.adapter.SmartHomeAdapter;
 import ru.sbt.mipt.oop.events.SensorEventType;
 import ru.sbt.mipt.oop.home_components.SmartHome;
 import ru.sbt.mipt.oop.home_readers.HomeReader;
+import ru.sbt.mipt.oop.home_readers.JSONHomeReader;
 import ru.sbt.mipt.oop.processors.*;
 
 import java.io.IOException;
@@ -15,8 +16,12 @@ import java.util.Map;
 
 @Configuration
 public class SmartHomeConfig {
+    @Bean 
+    public HomeReader homeReader(){
+        return new JSONHomeReader();
+    }
     @Bean
-    public SmartHome smartHome(HomeReader homeReader) throws IOException{
+    public SmartHome smartHome(HomeReader homeReader){
         return homeReader.read("smart-home-1.js");
     }
 
