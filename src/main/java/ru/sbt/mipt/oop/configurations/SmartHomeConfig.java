@@ -10,7 +10,6 @@ import ru.sbt.mipt.oop.home_readers.HomeReader;
 import ru.sbt.mipt.oop.home_readers.JSONHomeReader;
 import ru.sbt.mipt.oop.processors.*;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
